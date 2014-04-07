@@ -1,0 +1,54 @@
+import pygame, sys, random
+from pygame.locals import *
+from sys import exit
+
+pygame.init()
+
+mainClock = pygame.time.Clock()
+WINDOWWIDTH = 520
+WINDOWHEIGHT = 520
+windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
+
+pygame.display.set_caption("Tile Game")
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+SILVER = (192, 192, 192)
+GREEN = (0, 128, 0)
+YELLOW = (255, 255, 0)
+
+#value is where it starts drawing, second set is dimension of shape
+#grid in window starts at top left corner -> v, 
+Tiles = pygame.Rect(440, 440, 100, 100)
+
+windowSurface.fill(BLACK)
+
+myArray = [[0 for j in range(4)] for i in range(4)]
+X = 20
+Y = 20
+incr = 1
+for i in range(len(myArray)):
+    for j in range(len(myArray)):
+        if(incr == 5):
+            incr = 1
+            Y += 125
+            X = 20
+
+        myArray[i][j] = pygame.Rect(X, Y, 100, 100)
+        X += 125
+        incr += 1 
+
+for i in range(len(myArray)):
+    for j in range(len(myArray)):
+        pygame.draw.rect(windowSurface, SILVER, myArray[i][j])
+
+pygame.display.update()
+mainClock.tick(40)
+
+while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            exit(0)
+    
+
