@@ -1,9 +1,7 @@
-#similar to include statements
 import pygame, sys, random
 from pygame.locals import *
 from sys import exit
 
-#starts game
 pygame.init()
 
 mainClock = pygame.time.Clock()
@@ -37,7 +35,6 @@ Tiles = pygame.Rect(440, 440, 100, 100)
 
 windowSurface.fill(BLACK)
 
-text = basicFont.render("Text", True, WHITE)
 #making a 2D array that is 4 columns by 4 rows (look up Comprehension in python)
 myArray = [[0 for j in range(4)] for i in range(4)]
 X = 20; Y = 20; incr = 1
@@ -54,10 +51,15 @@ for i in range(len(myArray)):
         X += 125
         incr += 1 
 
+incr = 1
 #drawing the Rect objects i just created
 for i in range(len(myArray)):
     for j in range(len(myArray)):
         pygame.draw.rect(windowSurface, SILVER, myArray[i][j])
+        text = basicFont.render(str(incr), True, WHITE)
+        incr += 1
+        windowSurface.blit(text, (myArray[i][j].centerx - 15, myArray[i][j].centery - 10))
+
 
 #updates our game window with w/e changes have been made (emulates motion that we see)
 pygame.display.update()
