@@ -1,0 +1,13 @@
+http://stackoverflow.com/questions/14115440/pygame-installation-for-python-3-3
+link explains more
+
+install python 3.3.0 win 32 bit from here
+https://www.python.org/download/releases/3.3.0/
+
+install pygame 
+pygame-1.9.2a0.win32-py3.3.msi
+from here
+https://bitbucket.org/pygame/pygame/downloads
+
+your python install and pygame MUST BOTH BE 32 bit, pygame doesn't have a 64 bit vs
+i just made sure they were the same version for good measure since python's latest is only like 3.4
