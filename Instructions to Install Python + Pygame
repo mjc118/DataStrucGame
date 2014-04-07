@@ -11,3 +11,5 @@ https://bitbucket.org/pygame/pygame/downloads
 
 your python install and pygame MUST BOTH BE 32 bit, pygame doesn't have a 64 bit vs
 i just made sure they were the same version for good measure since python's latest is only like 3.4
+
+The zip file in the repository contains a bunch of examples of different things you can do with pygame, take a look
