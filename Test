@@ -1,16 +1,30 @@
+#similar to include statements
 import pygame, sys, random
 from pygame.locals import *
 from sys import exit
 
+#starts game
 pygame.init()
 
 mainClock = pygame.time.Clock()
+#setting dimensions of our games window and creating user variable needed
 WINDOWWIDTH = 520
 WINDOWHEIGHT = 520
 windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
 
+#set's title of window that opens up for your game
 pygame.display.set_caption("Tile Game")
 
+#Set up variables to shift table
+ShiftLeft = False
+ShiftRight = False
+ShiftUp = False
+ShiftDown = False
+
+#font object must be specified to be able to use text
+basicFont = pygame.font.Font(None, 25)
+
+#specifying colors(uses R,G,B)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 SILVER = (192, 192, 192)
@@ -23,10 +37,12 @@ Tiles = pygame.Rect(440, 440, 100, 100)
 
 windowSurface.fill(BLACK)
 
+text = basicFont.render("Text", True, WHITE)
+#making a 2D array that is 4 columns by 4 rows (look up Comprehension in python)
 myArray = [[0 for j in range(4)] for i in range(4)]
-X = 20
-Y = 20
-incr = 1
+X = 20; Y = 20; incr = 1
+
+#loading 2D array
 for i in range(len(myArray)):
     for j in range(len(myArray)):
         if(incr == 5):
@@ -38,17 +54,50 @@ for i in range(len(myArray)):
         X += 125
         incr += 1 
 
+#drawing the Rect objects i just created
 for i in range(len(myArray)):
     for j in range(len(myArray)):
         pygame.draw.rect(windowSurface, SILVER, myArray[i][j])
 
+#updates our game window with w/e changes have been made (emulates motion that we see)
 pygame.display.update()
+#mainClock is a user defined variable, this function call slows down the program so
+#game screen updates at a slower speed for the player
 mainClock.tick(40)
 
+#game loop, most of our "draw" or "fill" functions should be moved down here when 
+#we are ready
+#majority of the all capital words and keywords from the pygame library
+#event.type function handles use input such as keyboard or mouse
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             exit(0)
+        if event.type == KEYDOWN:
+            if event.key == K_LEFT:
+                ShiftLeft = True
+                ShiftRight = False
+            if event.key == K_RIGHT:
+                ShiftLeft = False
+                ShiftRight = True
+            if event.key == K_UP:
+                ShiftUp = True
+                ShiftDown = False
+            if event.key == K_DOWN:
+                ShiftUp = False
+                ShiftDown = True
+        if event.type == KEYUP:
+            if event.key == K_ESCAPE:
+                pygame.quit()
+                exit(0)
+            if event.key == K_LEFT:
+                ShiftLeft = False
+            if event.key == K_RIGHT:
+                ShiftRight = False
+            if event.key == K_UP:
+                ShiftUp = False
+            if event.key == K_DOWN:
+                ShiftDown = False
     
 
