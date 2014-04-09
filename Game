@@ -108,9 +108,17 @@ def RuleWindow():
                     ( event.pos[1] > ReturnBlck.top) and (event.pos[1] < ReturnBlck.bottom)):
                     GameLoop()
     return
+
 def GameWindow(RectList):
     #font object must be specified to be able to use text
     GameFont = pygame.font.Font(None, 25)
+    
+    GameArray = [[0 for j in range(4)] for i in range(4)]
+    for i in range(len(GameArray)):
+        for j in range(len(GameArray)):
+            GameArray[i][j] = 0
+
+    GameArray[random.randint(0,3)][random.randint(0,3)] = 2
 
     while True:
         #Set up variables to shift table
@@ -120,14 +128,12 @@ def GameWindow(RectList):
         ShiftDown = False
 
         windowSurface.fill(BLACK)
-        incr = 1
         #drawing the Rect objects i just created
         for i in range(len(RectList)):
             for j in range(len(RectList)):
                 pygame.draw.rect(windowSurface, SILVER, RectList[i][j])
-                text = GameFont.render(str(incr), True, WHITE)
-                incr += 1
-                windowSurface.blit(text, (RectList[i][j].centerx - 10, RectList[i][j].centery - 10))
+                text = GameFont.render(str(GameArray[i][j]), True, GREEN)
+                windowSurface.blit(text, (RectList[i][j].centerx - 8, RectList[i][j].centery - 10))
  
         pygame.display.update()
 
@@ -136,6 +142,9 @@ def GameWindow(RectList):
                 pygame.quit()
                 exit(0)
             if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+                    exit(0)
                 if event.key == K_LEFT:
                     ShiftLeft = True
                     ShiftRight = False
@@ -161,18 +170,43 @@ def GameWindow(RectList):
                 if event.key == K_DOWN:
                     ShiftDown = False
                 
-        GameLogic(ShiftLeft, ShiftRight, ShiftUp, ShiftDown)
+        GameLogic(ShiftLeft, ShiftRight, ShiftUp, ShiftDown, GameArray)
             #call a function here passing our boolean keyboard values? that performs the logic of game
     return
 
-def GameLogic(Left, Right, Up, Down):
+def GameLogic(Left, Right, Up, Down, NumArray):
+    Row = Col = 0
+    Spawned = False
     if Left:
-        print("Left")
-    if Right:
+        for i in range(len(NumArray)):
+            for j in range(len(NumArray)):
+                Row = i; Col = j
+                while((Col - 1) >= 0)and NumArray[i][Col - 1] == 0:
+                    NumArray[i][Col - 1] = NumArray[i][Col]
+                    NumArray[i][Col] = 0
+                    Col -= 1
+        for i in range(len(NumArray)):
+            for j in range(len(NumArray)):
+                if j <= 2 and NumArray[i][j] == NumArray[i][j + 1]:
+                    NumArray[i][j] *= 2
+                    NumArray[i][j + 1] = 0
+        for i in range(len(NumArray)):
+            for j in range(len(NumArray)):
+                Row = i; Col = j
+                while((Col - 1) >= 0)and NumArray[i][Col - 1] == 0:
+                    NumArray[i][Col - 1] = NumArray[i][Col]
+                    NumArray[i][Col] = 0
+                    Col -= 1
+        while not Spawned:
+            rand = random.randint(0,3)
+            if NumArray[rand][3] == 0:
+                NumArray[rand][3] = 2
+                Spawned = True
+    elif Right:
         print("Right")
-    if Up:
+    elif Up:
         print("Up")
-    if Down:
+    elif Down:
         print("Down")
                    
     return
