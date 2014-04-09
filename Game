@@ -92,6 +92,7 @@ def RuleWindow():
     RuleList.append(RuleFont.render("-You lose if there are no possible moves left that change the", True, WHITE))
     RuleList.append(RuleFont.render(" board state", True, WHITE))
     
+    #render rules onto display
     for i in range(len(RuleList)):
         windowSurface.blit(RuleList[i], (40,(i + 1)*40))
     
@@ -111,7 +112,7 @@ def RuleWindow():
 
 def GameWindow(RectList):
     #font object must be specified to be able to use text
-    GameFont = pygame.font.Font(None, 25)
+    GameFont = pygame.font.Font(None, 30)
     
     GameArray = [[0 for j in range(4)] for i in range(4)]
     for i in range(len(GameArray)):
@@ -132,7 +133,10 @@ def GameWindow(RectList):
         for i in range(len(RectList)):
             for j in range(len(RectList)):
                 pygame.draw.rect(windowSurface, SILVER, RectList[i][j])
-                text = GameFont.render(str(GameArray[i][j]), True, GREEN)
+                if GameArray[i][j] == 0:
+                    text = GameFont.render(" ", True, GREEN)
+                else:
+                    text = GameFont.render(str(GameArray[i][j]), True, GREEN)
                 windowSurface.blit(text, (RectList[i][j].centerx - 8, RectList[i][j].centery - 10))
  
         pygame.display.update()
@@ -177,10 +181,11 @@ def GameWindow(RectList):
 def GameLogic(Left, Right, Up, Down, NumArray):
     Row = Col = 0
     Spawned = False
+    Moved = False
     if Left:
         for i in range(len(NumArray)):
             for j in range(len(NumArray)):
-                Row = i; Col = j
+                Col = j
                 while((Col - 1) >= 0)and NumArray[i][Col - 1] == 0:
                     NumArray[i][Col - 1] = NumArray[i][Col]
                     NumArray[i][Col] = 0
@@ -192,7 +197,7 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     NumArray[i][j + 1] = 0
         for i in range(len(NumArray)):
             for j in range(len(NumArray)):
-                Row = i; Col = j
+                Col = j
                 while((Col - 1) >= 0)and NumArray[i][Col - 1] == 0:
                     NumArray[i][Col - 1] = NumArray[i][Col]
                     NumArray[i][Col] = 0
@@ -203,9 +208,61 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                 NumArray[rand][3] = 2
                 Spawned = True
     elif Right:
-        print("Right")
+        for i in range(len(NumArray)):
+            for j in range(4):
+                Col = j
+                while((Col - 1) >= 0)and NumArray[i][Col] == 0:
+                    NumArray[i][Col] = NumArray[i][Col - 1]
+                    NumArray[i][Col - 1] = 0
+                    Col -= 1
+        for i in range(len(NumArray)):
+            for j in range(4):
+                if j >= 1 and NumArray[i][j] == NumArray[i][j - 1]:
+                    NumArray[i][j] *= 2
+                    NumArray[i][j - 1] = 0
+        for i in range(len(NumArray)):
+            for j in range(4):
+                Col = j
+                while((Col - 1) >= 0)and NumArray[i][Col] == 0:
+                    NumArray[i][Col] = NumArray[i][Col - 1]
+                    NumArray[i][Col - 1] = 0
+                    Col -= 1
+        while not Spawned:
+            rand = random.randint(0,3)
+            if NumArray[rand][0] == 0:
+                NumArray[rand][0] = 2
+                Spawned = True
     elif Up:
-        print("Up")
+        for i in range(len(NumArray)):
+            for j in range(len(NumArray)):
+                Row = i
+                while((Row - 1) >= 0)and NumArray[Row - 1][j] == 0 and NumArray[Row][j] != 0:
+                    Moved = True
+                    NumArray[Row - 1][j] = NumArray[Row][j]
+                    NumArray[Row][j] = 0
+                    Row -= 1
+        for i in range(len(NumArray)):
+            for j in range(len(NumArray)):
+                if i <= 2 and NumArray[i][j] == NumArray[i + 1][j] and NumArray[i][j] != 0:
+                    Moved = True
+                    NumArray[i][j] *= 2
+                    NumArray[i + 1][j] = 0
+        for i in range(len(NumArray)):
+            for j in range(len(NumArray)):
+                Row = i
+                while((Row - 1) >= 0)and NumArray[Row - 1][j] == 0:
+                    NumArray[Row - 1][j] = NumArray[Row][j]
+                    NumArray[Row][j] = 0
+                    Row -= 1
+        incr = 0; incr += 1
+        print(Moved)
+        print()
+        if Moved:
+            while not Spawned:
+                rand = random.randint(0,3)
+                if NumArray[3][rand] == 0:
+                    NumArray[3][rand] = 2
+                    Spawned = True
     elif Down:
         print("Down")
                    
