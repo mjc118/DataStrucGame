@@ -15,6 +15,23 @@ SILVER = (192, 192, 192)
 GREEN = (0, 128, 0)
 YELLOW = (255, 255, 0)
 
+#making a 2D array that is 4 columns by 4 rows (look up Comprehension in python)
+myArray = [[0 for j in range(4)] for i in range(4)]
+X = 20; Y = 20; incr = 1
+
+#loading 2D array with our rectangle objects so they can be easily rendered later
+for i in range(len(myArray)):
+    for j in range(len(myArray)):
+        if(incr == 5):
+            incr = 1
+            Y += 125
+            X = 20
+
+        myArray[i][j] = pygame.Rect(X, Y, 100, 100)
+        X += 125
+        incr += 1 
+
+
 def Menu():
     windowSurface.fill(BLACK)
     #making special font for Menu use
@@ -29,7 +46,6 @@ def Menu():
     MenuBlocks.append(pygame.Rect(110, 60, 300, 100))
     MenuBlocks.append(pygame.Rect(110, 210, 300, 100))
     MenuBlocks.append(pygame.Rect(110, 360, 300, 100))
-
     for i in range(len(MenuBlocks)):
         #handles centering the different length text objects
         if i == 0:
@@ -58,6 +74,40 @@ def Menu():
                     pygame.quit()
                     exit(0)
 
+def RuleWindow():
+    windowSurface.fill(BLACK)
+
+    RuleFont = pygame.font.SysFont("arialblackms", 22)
+    ReturnFont = pygame.font.SysFont("arialblackms", 36)
+    
+    RuleList = []
+    RuleList.append(RuleFont.render("-Reach 2048 to win, by shifting the puzzle", True, WHITE))
+    RuleList.append(RuleFont.render("-You can shift the puzzle Left, Right, Up, or Down", True, WHITE))
+    RuleList.append(RuleFont.render(" by using the arrow keys", True, WHITE))
+    RuleList.append(RuleFont.render("-When shifted all tiles try to move as far in the specified", True, WHITE))
+    RuleList.append(RuleFont.render(" direction as possible", True, WHITE))
+    RuleList.append(RuleFont.render("-When two tiles of the same integer meet they Combine together", True, WHITE))
+    RuleList.append(RuleFont.render(" and form the sum of the like tiles in the direction you were", True, WHITE))
+    RuleList.append(RuleFont.render(" shifting the table", True, WHITE))
+    RuleList.append(RuleFont.render("-You lose if there are no possible moves left that change the", True, WHITE))
+    RuleList.append(RuleFont.render(" board state", True, WHITE))
+    
+    for i in range(len(RuleList)):
+        windowSurface.blit(RuleList[i], (40,(i + 1)*40))
+    
+    #create box to return to main menu
+    ReturnBlck = pygame.Rect( 380, 450, 120, 50)
+    ReturnText = ReturnFont.render("Return", True, GREEN)
+    pygame.draw.rect(windowSurface, WHITE,ReturnBlck)
+    windowSurface.blit(ReturnText,(ReturnBlck.centerx - 40, ReturnBlck.centery - 12))
+    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == MOUSEBUTTONDOWN:
+                if ((event.pos[0] > ReturnBlck.left) and (event.pos[0] < ReturnBlck.right) and \
+                    ( event.pos[1] > ReturnBlck.top) and (event.pos[1] < ReturnBlck.bottom)):
+                    GameLoop()
+    return
 def GameWindow(RectList):
     #font object must be specified to be able to use text
     GameFont = pygame.font.Font(None, 25)
@@ -127,38 +177,7 @@ def GameLogic(Left, Right, Up, Down):
                    
     return
 
-def main():
-    pygame.init() #required 
-
-    mainClock = pygame.time.Clock() #used to set speed at which window updates
-
-    #set's title of window that opens up for your game
-    pygame.display.set_caption("Tile Game")
-
-    #making a 2D array that is 4 columns by 4 rows (look up Comprehension in python)
-    myArray = [[0 for j in range(4)] for i in range(4)]
-    X = 20; Y = 20; incr = 1
-
-    #loading 2D array with our rectangle objects so they can be easily rendered later
-    for i in range(len(myArray)):
-        for j in range(len(myArray)):
-            if(incr == 5):
-                incr = 1
-                Y += 125
-                X = 20
-
-            myArray[i][j] = pygame.Rect(X, Y, 100, 100)
-            X += 125
-            incr += 1 
-
-    #mainClock is a user defined variable, this function call slows down the program so
-    #game screen updates at a slower speed for the player
-    mainClock.tick(100)
-
-    #game loop, most of our "draw" or "fill" functions should be moved down here when 
-    #we are ready
-    #majority of the all capital words and keywords from the pygame library
-    #event.type function handles use input such as keyboard or mouse
+def GameLoop():
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -169,8 +188,23 @@ def main():
         if choice == 1:
             GameWindow(myArray)
         elif choice == 2:
-            #add in jump to a Rules function
-            print()
+            RuleWindow()
+    return
+
+def main():
+    pygame.init() #required 
+
+    mainClock = pygame.time.Clock() #used to set speed at which window updates
+
+    #set's title of window that opens up for your game
+    pygame.display.set_caption("Tile Game")
+    
+    #mainClock is a user defined variable, this function call slows down the program so
+    #game screen updates at a slower speed for the player
+    mainClock.tick(100)
+    GameLoop()
+    
+    exit(0)
 
 if __name__ == "__main__":
     main()
