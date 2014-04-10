@@ -65,10 +65,10 @@ def Menu():
             if event.type == MOUSEBUTTONDOWN:
                 if((event.pos[0] > MenuBlocks[0].left) and (event.pos[0] < MenuBlocks[0].right) and ( event.pos[1] > \
                     MenuBlocks[0].top) and (event.pos[1] < MenuBlocks[0].bottom)):
-                    return 1
+                    GameWindow(myArray)
                 elif((event.pos[0] > MenuBlocks[1].left) and (event.pos[0] < MenuBlocks[1].right) and ( event.pos[1] > \
                     MenuBlocks[1].top) and (event.pos[1] < MenuBlocks[1].bottom)):
-                    return 2
+                    RuleWindow()
                 elif((event.pos[0] > MenuBlocks[2].left) and (event.pos[0] < MenuBlocks[2].right) and ( event.pos[1] > \
                     MenuBlocks[2].top) and (event.pos[1] < MenuBlocks[2].bottom)):
                     pygame.quit()
@@ -107,7 +107,7 @@ def RuleWindow():
             if event.type == MOUSEBUTTONDOWN:
                 if ((event.pos[0] > ReturnBlck.left) and (event.pos[0] < ReturnBlck.right) and \
                     ( event.pos[1] > ReturnBlck.top) and (event.pos[1] < ReturnBlck.bottom)):
-                    GameLoop()
+                    Menu()
     return
 
 def GameWindow(RectList):
@@ -249,7 +249,7 @@ def GameLogic(Left, Right, Up, Down, NumArray):
             for j in range(4):
                 if j >= 1 and NumArray[i][j] == NumArray[i][j - 1] and NumArray[i][j] != 0:
                     Moved = True
-                    NumArray[i][j] *= 2
+                    NumArray[i][j] *= 2#BUGGGED <------------------------
                     NumArray[i][j - 1] = 0
         for i in range(len(NumArray)):
             for j in range(4):
@@ -308,7 +308,7 @@ def GameLogic(Left, Right, Up, Down, NumArray):
             for j in range(len(NumArray)):
                 if i >= 1 and NumArray[i][j] == NumArray[i - 1][j] and NumArray[i][j] != 0:
                     Moved = True
-                    NumArray[i][j] *= 2
+                    NumArray[i][j] *= 2#BUGGGGEDD<-------------------------
                     NumArray[i - 1][j] = 0
         for i in range(4):
             for j in range(len(NumArray)):
@@ -328,20 +328,6 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                    
     return Check(NumArray, Moved)
 
-def GameLoop():
-    while True:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                exit(0)
-
-        choice = Menu()
-        if choice == 1:
-            GameWindow(myArray)
-        elif choice == 2:
-            RuleWindow()
-    return
-
 def main():
     pygame.init() #required 
 
@@ -353,7 +339,7 @@ def main():
     #mainClock is a user defined variable, this function call slows down the program so
     #game screen updates at a slower speed for the player
     mainClock.tick(100)
-    GameLoop()
+    Menu()
     
     exit(0)
 
