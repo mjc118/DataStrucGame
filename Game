@@ -88,7 +88,7 @@ def RuleWindow():
     RuleList.append(RuleFont.render(" direction as possible", True, WHITE))
     RuleList.append(RuleFont.render("-When two tiles of the same integer meet they Combine together", True, WHITE))
     RuleList.append(RuleFont.render(" and form the sum of the like tiles in the direction you were", True, WHITE))
-    RuleList.append(RuleFont.render(" shifting the table", True, WHITE))
+    RuleList.append(RuleFont.render(" shifting the table. Ex 2,2 would turn into one 4 tile ", True, WHITE))
     RuleList.append(RuleFont.render("-You lose if there are no possible moves left that change the", True, WHITE))
     RuleList.append(RuleFont.render(" board state", True, WHITE))
     
