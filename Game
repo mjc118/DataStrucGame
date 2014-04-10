@@ -247,10 +247,10 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     Col -= 1
         for i in range(len(NumArray)):
             for j in range(4):
-                if j >= 1 and NumArray[i][j] == NumArray[i][j - 1] and NumArray[i][j] != 0:
+                if j <= 2 and NumArray[i][j] == NumArray[i][j + 1] and NumArray[i][j] != 0:
                     Moved = True
-                    NumArray[i][j] *= 2#BUGGGED <------------------------
-                    NumArray[i][j - 1] = 0
+                    NumArray[i][j] *= 2
+                    NumArray[i][j + 1] = 0
         for i in range(len(NumArray)):
             for j in range(4):
                 Col = j
@@ -306,10 +306,10 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     Row -= 1
         for i in range(4):
             for j in range(len(NumArray)):
-                if i >= 1 and NumArray[i][j] == NumArray[i - 1][j] and NumArray[i][j] != 0:
+                if i <= 2 and NumArray[i][j] == NumArray[i + 1][j] and NumArray[i][j] != 0:
                     Moved = True
-                    NumArray[i][j] *= 2#BUGGGGEDD<-------------------------
-                    NumArray[i - 1][j] = 0
+                    NumArray[i][j] *= 2
+                    NumArray[i + 1][j] = 0
         for i in range(4):
             for j in range(len(NumArray)):
                 Row = i
