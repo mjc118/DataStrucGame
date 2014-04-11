@@ -1,0 +1,19 @@
+-Game currently doesn't stop if you hit 2048(no win notification)
+
+-Game does know when you have lost but at the moment it immediately goes back to menu
+  -Possibly have a popup window when you lose that allows mouse input to either quit the program
+    or try again
+    
+-Add in a way to keep track of score? use w/e you would like to count as "points" 
+  -Tiles combining, Moves made? w/e floats your boat
+  
+-Maybe keep track of highscores along with previous idea,  could possibly have a text file attached
+  -which is loaded off of when game starts and written over when we are ending
+  
+-Graphics could be improved upon if anyone wants to figure out how we would
+
+These are just a few ideas, add whatever you would like
+
+ONLY commit to github if code compiles and works(if there are bugs they aren't game breaking
+  and can be fixed later)
+  
