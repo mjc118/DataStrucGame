@@ -237,21 +237,21 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     Spawned = True
     #Right Shift
     elif Right:
-        for i in range(len(NumArray)):
-            for j in range(4):
+        for i in range(4):
+            for j in range(3, -1, -1):
                 Col = j
-                while((Col - 1) >= 0)and NumArray[i][Col] == 0 and NumArray[i][Col - 1] != 0:
+                while((Col + 1) <= 3)and NumArray[i][Col + 1] == 0 and NumArray[i][Col] != 0:
                     Moved = True
-                    NumArray[i][Col] = NumArray[i][Col - 1]
-                    NumArray[i][Col - 1] = 0
-                    Col -= 1
-        for i in range(len(NumArray)):
-            for j in range(4):
-                if j <= 2 and NumArray[i][j] == NumArray[i][j + 1] and NumArray[i][j] != 0:
+                    NumArray[i][Col + 1] = NumArray[i][Col]
+                    NumArray[i][Col] = 0
+                    Col += 1
+        for i in range(4):
+            for j in range(3, -1, -1):
+                if j >= 1 and NumArray[i][j] == NumArray[i][j - 1] and NumArray[i][j] != 0:
                     Moved = True
                     NumArray[i][j] *= 2
-                    NumArray[i][j + 1] = 0
-        for i in range(len(NumArray)):
+                    NumArray[i][j - 1] = 0
+        for i in range(4):
             for j in range(4):
                 Col = j
                 while((Col - 1) >= 0)and NumArray[i][Col] == 0:
@@ -266,22 +266,22 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     Spawned = True
     #Upward Shift
     elif Up:
-        for i in range(len(NumArray)):
-            for j in range(len(NumArray)):
+        for i in range(4):
+            for j in range(4):
                 Row = i
                 while((Row - 1) >= 0)and NumArray[Row - 1][j] == 0 and NumArray[Row][j] != 0:
                     Moved = True
                     NumArray[Row - 1][j] = NumArray[Row][j]
                     NumArray[Row][j] = 0
                     Row -= 1
-        for i in range(len(NumArray)):
-            for j in range(len(NumArray)):
+        for i in range(4):
+            for j in range(4):
                 if i <= 2 and NumArray[i][j] == NumArray[i + 1][j] and NumArray[i][j] != 0:
                     Moved = True
                     NumArray[i][j] *= 2
                     NumArray[i + 1][j] = 0
-        for i in range(len(NumArray)):
-            for j in range(len(NumArray)):
+        for i in range(4):
+            for j in range(4):
                 Row = i
                 while((Row - 1) >= 0)and NumArray[Row - 1][j] == 0:
                     NumArray[Row - 1][j] = NumArray[Row][j]
@@ -296,20 +296,20 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     Spawned = True
     #Downward Shift
     elif Down:
-        for i in range(4):
-            for j in range(len(NumArray)):
+        for i in range(3, -1, -1):
+            for j in range(4):
                 Row = i
-                while((Row - 1) >= 0)and NumArray[Row][j] == 0 and NumArray[Row - 1][j] != 0:
+                while((Row + 1) <= 3)and NumArray[Row + 1][j] == 0 and NumArray[Row][j] != 0:
                     Moved = True
-                    NumArray[Row][j] = NumArray[Row - 1][j]
-                    NumArray[Row - 1][j] = 0
-                    Row -= 1
-        for i in range(4):
-            for j in range(len(NumArray)):
-                if i <= 2 and NumArray[i][j] == NumArray[i + 1][j] and NumArray[i][j] != 0:
+                    NumArray[Row + 1][j] = NumArray[Row][j]
+                    NumArray[Row][j] = 0
+                    Row += 1
+        for i in range(3, -1, -1):
+            for j in range(4):
+                if i >= 1 and NumArray[i][j] == NumArray[i - 1][j] and NumArray[i][j] != 0:
                     Moved = True
                     NumArray[i][j] *= 2
-                    NumArray[i + 1][j] = 0
+                    NumArray[i - 1][j] = 0
         for i in range(4):
             for j in range(len(NumArray)):
                 Row = i
