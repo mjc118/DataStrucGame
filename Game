@@ -175,11 +175,10 @@ def GameWindow(RectList):
 
     GameArray[random.randint(0,3)][random.randint(0,3)] = 2
     global score
-    ScoreString = "Score: {0:01}".format(score)
 
     while True:
 
-
+        ScoreString = "Score: {0:01}".format(score)
 
         #Determine clock variables
         TotalSeconds = StartTime - (FrameCount // FrameRate)
