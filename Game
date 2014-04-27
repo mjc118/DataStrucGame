@@ -24,7 +24,7 @@ score = 0
 
 #create clock object
 timer = pygame.time.Clock()
-FrameRate = 1000
+FrameRate = 60
 FrameCount = 0
 
 #loading 2D array with our rectangle objects so they can be easily rendered later
@@ -162,8 +162,10 @@ def GameOver():
 
 def GameWindow(RectList):
 
-    #2 minute timer
+    #1 minute timer
     StartTime = 60
+
+    GameClock = pygame.time.Clock()
     
     #font object must be specified to be able to use text
     GameFont = pygame.font.Font(None, 30)
@@ -175,13 +177,19 @@ def GameWindow(RectList):
 
     GameArray[random.randint(0,3)][random.randint(0,3)] = 2
     global score
+    score = 0
+
+    global FrameCount
+    FrameCount = 0
 
     while True:
+
+        GameClock.tick(FrameRate)
 
         ScoreString = "Score: {0:01}".format(score)
 
         #Determine clock variables
-        TotalSeconds = StartTime - (FrameCount // FrameRate)
+        TotalSeconds = StartTime - int(FrameCount // FrameRate)
         if TotalSeconds < 0:
             TotalSeconds = 0
         Minutes = TotalSeconds // 60
@@ -274,7 +282,6 @@ def GameWindow(RectList):
         windowSurface.blit(ScoreText, (25, 515))
         windowSurface.blit(TimerText, (275, 515))
 
-        global FrameCount
         FrameCount += 1
         pygame.display.update()
 
@@ -486,7 +493,6 @@ def main():
     
     #mainClock is a user defined variable, this function call slows down the program so
     #game screen updates at a slower speed for the player
-    FrameCount += 1
     mainClock.tick(FrameRate)
     Menu()
     
