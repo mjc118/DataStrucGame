@@ -199,14 +199,75 @@ def GameWindow(RectList):
 
         windowSurface.fill(BLACK)
         #drawing the Rect objects i just created
+        #color changing based on value
         for i in range(len(RectList)):
             for j in range(len(RectList)):
-                pygame.draw.rect(windowSurface, SILVER, RectList[i][j])
+                random.seed()
+                if GameArray[i][j]==0:
+                    pygame.draw.rect(windowSurface, BLACK, RectList[i][j])
+                    
+                elif GameArray[i][j]==2:
+                    pygame.draw.rect(windowSurface, (SILVER), RectList[i][j])                    
+                    
+                elif GameArray[i][j]==2**2:
+                    pygame.draw.rect(windowSurface, (192+5,192+5,192-17), RectList[i][j])                    
+                    
+                elif GameArray[i][j]==2**3:
+                    pygame.draw.rect(windowSurface, (192+5*2,192+5*2,192-17*2), RectList[i][j])                    
+                    
+                elif GameArray[i][j]==2**4:
+                    pygame.draw.rect(windowSurface, (192+5*3,192+5*3,192-17*3), RectList[i][j])                    
+                    
+                elif GameArray[i][j]==2**5:
+                    pygame.draw.rect(windowSurface, (192+5*4,192+5*4,192-17*4), RectList[i][j])
+                                        
+                elif GameArray[i][j]==2**6:
+                    pygame.draw.rect(windowSurface, (192+5*5,192+5*5,192-17*5), RectList[i][j]) 
+                                       
+                elif GameArray[i][j]==2**7:
+                    pygame.draw.rect(windowSurface, (192+5*6,192+5*6,192-17*6), RectList[i][j]) 
+                                       
+                elif GameArray[i][j]==2**8:
+                    pygame.draw.rect(windowSurface, (192+5*7,192+5*7,192-17*7), RectList[i][j])                    
+                    
+                elif GameArray[i][j]==2**9:
+                    pygame.draw.rect(windowSurface, (192+5*8,192+5*8,192-17*8), RectList[i][j])                    
+                   
+                elif GameArray[i][j]==2**10:
+                    pygame.draw.rect(windowSurface, (192+5*9,192+5*9,192-17*9), RectList[i][j])                    
+                    
+                elif GameArray[i][j]==2**11:
+                    pygame.draw.rect(windowSurface, (39,161,161), RectList[i][j])                    
+                    
+                elif GameArray[i][j]==2**12:
+                    pygame.draw.rect(windowSurface, (255,163,3), RectList[i][j])                    
+                   
+                else:                    
+                    pygame.draw.rect(windowSurface, WHITE, RectList[i][j])   
+                
+                #tile border    
+                if Seconds>10:
+                    pygame.draw.rect(windowSurface, (162,62,152), RectList[i][j], 7)
+                elif Seconds==0:                    
+                    pygame.draw.rect(windowSurface, GREEN, RectList[i][j], 7)
+                elif Seconds<10:
+                    pygame.draw.rect(windowSurface, (255,0,0), RectList[i][j], 7)
+
+                                     
+                    
                 if GameArray[i][j] == 0:
                     text = GameFont.render(" ", True, GREEN)
                 else:
                     text = GameFont.render(str(GameArray[i][j]), True, GREEN)
-                windowSurface.blit(text, (RectList[i][j].centerx - 8, RectList[i][j].centery - 10))
+
+
+                #Centered tile values based on length
+                if GameArray[i][j] <100:
+                    windowSurface.blit(text, (RectList[i][j].centerx - 8, RectList[i][j].centery - 10))
+                elif GameArray[i][j] < 1000:
+                    windowSurface.blit(text, (RectList[i][j].centerx - 20, RectList[i][j].centery - 10))
+                else:
+                    windowSurface.blit(text, (RectList[i][j].centerx - 25, RectList[i][j].centery - 10))
  
         
         ScoreText = GameFont.render(ScoreString, True, SILVER)
@@ -252,7 +313,7 @@ def GameWindow(RectList):
                 
         if GameLogic(ShiftLeft, ShiftRight, ShiftUp, ShiftDown, GameArray):
             #Make interface to handle game over
-            Menu()
+            GameOver()
         if TotalSeconds == 0:
             GameOver()
             break
