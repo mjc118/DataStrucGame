@@ -89,7 +89,8 @@ def RuleWindow():
     ReturnFont = pygame.font.SysFont("arialblackms", 36)
     
     RuleList = []
-    RuleList.append(RuleFont.render("-Reach 2048 to win, by shifting the puzzle", True, WHITE))
+    RuleList.append(RuleFont.render("-Try to get the highest score possible in 1 minute", True, WHITE))
+    RuleList.append(RuleFont.render(" by shifting the puzzle", True, WHITE))
     RuleList.append(RuleFont.render("-You can shift the puzzle Left, Right, Up, or Down", True, WHITE))
     RuleList.append(RuleFont.render(" by using the arrow keys", True, WHITE))
     RuleList.append(RuleFont.render("-When shifted all tiles try to move as far in the specified", True, WHITE))
@@ -97,14 +98,15 @@ def RuleWindow():
     RuleList.append(RuleFont.render("-When two tiles of the same integer meet they Combine together", True, WHITE))
     RuleList.append(RuleFont.render(" and form the sum of the like tiles in the direction you were", True, WHITE))
     RuleList.append(RuleFont.render(" shifting the table. Ex 2,2 would turn into one 4 tile ", True, WHITE))
-    RuleList.append(RuleFont.render("-Try to get the highest score possible in 1 minute", True, WHITE))
+    RuleList.append(RuleFont.render("-Forming tiles with larger integers gives you more points", True, WHITE))
+    RuleList.append(RuleFont.render(" I.E. making an 8 gives more points than making a 4", True, WHITE))
     
     #render rules onto display
     for i in range(len(RuleList)):
         windowSurface.blit(RuleList[i], (40,(i + 1)*40))
     
     #create box to return to main menu
-    ReturnBlck = pygame.Rect( 380, 450, 120, 50)
+    ReturnBlck = pygame.Rect( 380, 470, 120, 50)
     ReturnText = ReturnFont.render("Return", True, GREEN)
     pygame.draw.rect(windowSurface, WHITE,ReturnBlck)
     windowSurface.blit(ReturnText,(ReturnBlck.centerx - 40, ReturnBlck.centery - 12))
