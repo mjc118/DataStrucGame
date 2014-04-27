@@ -5,7 +5,7 @@ from sys import exit
 #GLOBAL VARIABLES
 #setting dimensions of our games window and creating user variable needed
 WINDOWWIDTH = 520
-WINDOWHEIGHT = 520
+WINDOWHEIGHT = 570
 windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
 
 #specifying colors(uses R,G,B)
@@ -19,6 +19,14 @@ YELLOW = (255, 255, 0)
 myArray = [[0 for j in range(4)] for i in range(4)]
 X = 20; Y = 20; incr = 1
 
+#integer for storing score
+score = 0
+
+#create clock object
+timer = pygame.time.Clock()
+FrameRate = 1000
+FrameCount = 0
+
 #loading 2D array with our rectangle objects so they can be easily rendered later
 for i in range(len(myArray)):
     for j in range(len(myArray)):
@@ -29,7 +37,7 @@ for i in range(len(myArray)):
 
         myArray[i][j] = pygame.Rect(X, Y, 100, 100)
         X += 125
-        incr += 1 
+        incr += 1
 
 
 def Menu():
@@ -55,7 +63,7 @@ def Menu():
         else:
             x = 30
         pygame.draw.rect(windowSurface, WHITE, MenuBlocks[i])
-        windowSurface.blit(MenuText[i], (MenuBlocks[i].centerx - x, MenuBlocks[i].centery - 10)) 
+        windowSurface.blit(MenuText[i], (MenuBlocks[i].centerx - x, MenuBlocks[i].centery - 10))
     
     #updates our game window with w/e changes have been made (emulates motion that we see)
     pygame.display.update()
@@ -89,8 +97,7 @@ def RuleWindow():
     RuleList.append(RuleFont.render("-When two tiles of the same integer meet they Combine together", True, WHITE))
     RuleList.append(RuleFont.render(" and form the sum of the like tiles in the direction you were", True, WHITE))
     RuleList.append(RuleFont.render(" shifting the table. Ex 2,2 would turn into one 4 tile ", True, WHITE))
-    RuleList.append(RuleFont.render("-You lose if there are no possible moves left that change the", True, WHITE))
-    RuleList.append(RuleFont.render(" board state", True, WHITE))
+    RuleList.append(RuleFont.render("-Try to get the highest score possible in 1 minute", True, WHITE))
     
     #render rules onto display
     for i in range(len(RuleList)):
@@ -110,7 +117,54 @@ def RuleWindow():
                     Menu()
     return
 
+def GameOver():
+    #handles when timer runs out
+    
+    global score
+
+    windowSurface.fill(BLACK)
+
+    GameFont = pygame.font.Font(None, 30)
+
+    GameOverString = "GAME OVER"
+    GameOverText = GameFont.render(GameOverString, True, SILVER)
+
+    ScoreString = "Final Score: {0:01}".format(score)
+    ScoreText = GameFont.render(ScoreString, True, SILVER)
+
+    ScoreLen = len(str(score))
+
+    windowSurface.blit(GameOverText, (180, 250))
+    windowSurface.blit(ScoreText, ((180 - (ScoreLen * 5), 300)))
+
+    #display option to return to game/quit
+    MenuOption = pygame.Rect(135, 450, 110, 50)
+    QuitOption = pygame.Rect(265, 450, 110, 50)
+    MenuText = GameFont.render("Menu", True, GREEN)
+    QuitText = GameFont.render("Quit", True, GREEN)
+
+    pygame.draw.rect(windowSurface, WHITE, MenuOption)
+    windowSurface.blit(MenuText, (MenuOption.centerx - 40, MenuOption.centery - 12))
+    pygame.draw.rect(windowSurface, WHITE, QuitOption)
+    windowSurface.blit(QuitText, (QuitOption.centerx - 40, QuitOption.centery - 12))
+    
+    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == MOUSEBUTTONDOWN:
+                if ((event.pos[0] > MenuOption.left) and (event.pos[0] < MenuOption.right) and \
+                    (event.pos[1] > MenuOption.top) and (event.pos[1] < MenuOption.bottom)):
+                    Menu()
+                elif ((event.pos[0] > QuitOption.left) and (event.pos[0] < QuitOption.right) and \
+                    (event.pos[1] > QuitOption.top) and (event.pos[1] < QuitOption.bottom)):
+                    pygame.quit()
+                    exit(0)
+
 def GameWindow(RectList):
+
+    #2 minute timer
+    StartTime = 60
+    
     #font object must be specified to be able to use text
     GameFont = pygame.font.Font(None, 30)
     
@@ -120,8 +174,24 @@ def GameWindow(RectList):
             GameArray[i][j] = 0
 
     GameArray[random.randint(0,3)][random.randint(0,3)] = 2
+    global score
+    ScoreString = "Score: {0:01}".format(score)
 
     while True:
+
+
+
+        #Determine clock variables
+        TotalSeconds = StartTime - (FrameCount // FrameRate)
+        if TotalSeconds < 0:
+            TotalSeconds = 0
+        Minutes = TotalSeconds // 60
+        Seconds = TotalSeconds % 60
+
+
+        TimerString = "Time remaining: {0:02}:{1:02}".format(Minutes, Seconds)
+        TimerText = GameFont.render(TimerString, True, SILVER)
+
         #Set up variables to shift table
         ShiftLeft = False
         ShiftRight = False
@@ -139,6 +209,13 @@ def GameWindow(RectList):
                     text = GameFont.render(str(GameArray[i][j]), True, GREEN)
                 windowSurface.blit(text, (RectList[i][j].centerx - 8, RectList[i][j].centery - 10))
  
+        
+        ScoreText = GameFont.render(ScoreString, True, SILVER)
+        windowSurface.blit(ScoreText, (25, 515))
+        windowSurface.blit(TimerText, (275, 515))
+
+        global FrameCount
+        FrameCount += 1
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -175,8 +252,11 @@ def GameWindow(RectList):
                     ShiftDown = False
                 
         if GameLogic(ShiftLeft, ShiftRight, ShiftUp, ShiftDown, GameArray):
-            #Make interface to handle game over               
+            #Make interface to handle game over
             Menu()
+        if TotalSeconds == 0:
+            GameOver()
+            break
 
     return
 
@@ -205,25 +285,27 @@ def GameLogic(Left, Right, Up, Down, NumArray):
     Row = Col = 0
     Spawned = False
     Moved = False
+    global score
 
     #Left Shift
     if Left:
-        for i in range(len(NumArray)):
-            for j in range(len(NumArray)):
+        for i in range(4):
+            for j in range(4):
                 Col = j
                 while((Col - 1) >= 0)and NumArray[i][Col - 1] == 0 and NumArray[i][Col] != 0:
                     Moved = True
                     NumArray[i][Col - 1] = NumArray[i][Col]
                     NumArray[i][Col] = 0
                     Col -= 1
-        for i in range(len(NumArray)):
-            for j in range(len(NumArray)):
+        for i in range(4):
+            for j in range(4):
                 if j <= 2 and NumArray[i][j] == NumArray[i][j + 1] and NumArray[i][j] != 0:
                     Moved = True
                     NumArray[i][j] *= 2
                     NumArray[i][j + 1] = 0
-        for i in range(len(NumArray)):
-            for j in range(len(NumArray)):
+                    score += NumArray[i][j]
+        for i in range(4):
+            for j in range(4):
                 Col = j
                 while((Col - 1) >= 0)and NumArray[i][Col - 1] == 0:
                     NumArray[i][Col - 1] = NumArray[i][Col]
@@ -251,6 +333,7 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     Moved = True
                     NumArray[i][j] *= 2
                     NumArray[i][j - 1] = 0
+                    score += NumArray[i][j]
         for i in range(4):
             for j in range(4):
                 Col = j
@@ -280,6 +363,7 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     Moved = True
                     NumArray[i][j] *= 2
                     NumArray[i + 1][j] = 0
+                    score += NumArray[i][j]
         for i in range(4):
             for j in range(4):
                 Row = i
@@ -310,8 +394,9 @@ def GameLogic(Left, Right, Up, Down, NumArray):
                     Moved = True
                     NumArray[i][j] *= 2
                     NumArray[i - 1][j] = 0
+                    score += NumArray[i][j]
         for i in range(4):
-            for j in range(len(NumArray)):
+            for j in range(4):
                 Row = i
                 while((Row - 1) >= 0)and NumArray[Row][j] == 0 and NumArray[Row - 1][j] != 0:
                     NumArray[Row][j] = NumArray[Row - 1][j]
@@ -329,7 +414,10 @@ def GameLogic(Left, Right, Up, Down, NumArray):
     return Check(NumArray, Moved)
 
 def main():
-    pygame.init() #required 
+    pygame.init() #required
+
+    global FrameRate
+    global FrameCount
 
     mainClock = pygame.time.Clock() #used to set speed at which window updates
 
@@ -338,7 +426,8 @@ def main():
     
     #mainClock is a user defined variable, this function call slows down the program so
     #game screen updates at a slower speed for the player
-    mainClock.tick(100)
+    FrameCount += 1
+    mainClock.tick(FrameRate)
     Menu()
     
     exit(0)
